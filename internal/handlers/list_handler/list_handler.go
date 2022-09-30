@@ -1,6 +1,8 @@
 package list_handler
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	"tgbot/internal/infrastructure/telegram/telegram_models"
+)
 
 type UseCase interface {
 	List() (interface{}, error)
@@ -14,6 +16,6 @@ func NewListHandler(uc UseCase) *ListHandler {
 	return &ListHandler{uc: uc}
 }
 
-func (gh *ListHandler) Handle(update tgbotapi.Update) (tgbotapi.Chattable, error) {
-	return nil, nil
+func (gh *ListHandler) Handle(targetInfo telegram_models.TGMessageInfo) (string, error) {
+	return "", nil
 }

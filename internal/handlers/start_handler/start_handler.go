@@ -1,6 +1,8 @@
 package start_handler
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	"tgbot/internal/infrastructure/telegram/telegram_models"
+)
 
 type UseCase interface {
 	Start() string
@@ -14,8 +16,6 @@ func NewStartHandler(uc UseCase) *StartHandler {
 	return &StartHandler{uc: uc}
 }
 
-func (sh StartHandler) Handle(update tgbotapi.Update) (tgbotapi.Chattable, error) {
-	startMsg := sh.uc.Start()
-	chattable := tgbotapi.NewMessage(update.Message.Chat.ID, startMsg)
-	return chattable, nil
+func (sh StartHandler) Handle(targetInfo telegram_models.TGMessageInfo) (string, error) {
+	return sh.uc.Start(), nil
 }
