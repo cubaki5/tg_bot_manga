@@ -1,2 +1,3 @@
 vendor
 .idea
+internal/infrastructure/telegram/token.go
