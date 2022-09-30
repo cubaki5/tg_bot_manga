@@ -32,12 +32,11 @@ func main() {
 	notExecComUC := not_existed_command_use_case.NewNotExistedCommandUseCase()
 
 	tgBot := telegram.NewTGBot(map[string]telegram.Handler{
-		"/start":              start_handler.NewStartHandler(startUC),
-		"/add":                add_handler.NewAddHandler(adUC),
-		"/delete":             delete_handler.NewDeleteHandler(delUC),
-		"/get":                list_handler.NewListHandler(getUC),
-		"not_existed_command": not_existed_command_handler.NewNotExistedCommandHandler(notExecComUC),
-	})
+		"start":  start_handler.NewStartHandler(startUC),
+		"add":    add_handler.NewAddHandler(adUC),
+		"delete": delete_handler.NewDeleteHandler(delUC),
+		"list":   list_handler.NewListHandler(getUC),
+	}, not_existed_command_handler.NewNotExistedCommandHandler(notExecComUC))
 
 	tgBot.Run()
 	not.CheckUpdates()

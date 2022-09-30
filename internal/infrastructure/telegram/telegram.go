@@ -3,7 +3,6 @@ package telegram
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/labstack/gommon/log"
-	"strings"
 	"tgbot/internal/infrastructure/telegram/telegram_models"
 )
 
@@ -12,11 +11,12 @@ type Handler interface {
 }
 
 type TelegramBot struct {
-	bot      *tgbotapi.BotAPI
-	handlers map[string]Handler
+	bot               *tgbotapi.BotAPI
+	handlers          map[string]Handler
+	notExistedCommand Handler
 }
 
-func NewTGBot(handlers map[string]Handler) *TelegramBot {
+func NewTGBot(handlers map[string]Handler, notExistedCommand Handler) *TelegramBot {
 
 	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
@@ -24,8 +24,9 @@ func NewTGBot(handlers map[string]Handler) *TelegramBot {
 	}
 
 	return &TelegramBot{
-		bot:      bot,
-		handlers: handlers,
+		bot:               bot,
+		handlers:          handlers,
+		notExistedCommand: notExistedCommand,
 	}
 }
 
@@ -38,23 +39,23 @@ func (t *TelegramBot) Run() {
 
 	for update := range updatesChan {
 		go func(update tgbotapi.Update) {
-			command := strings.Split(update.Message.Text, " ")
-			t.updateHandle(update, command[0])
+			t.updateHandle(update, update.Message.Command())
 		}(update)
 	}
 }
 
 func (t *TelegramBot) updateHandle(update tgbotapi.Update, command string) {
+	var (
+		msg string
+		err error
+	)
+
+	tgInfo := telegram_models.NewTGMessageInfo(telegram_models.TitleInfo(update.Message.CommandArguments()))
 
 	if _, ok := t.handlers[command]; !ok {
-		command = "not_existed_command"
-	}
-
-	tgInfo := telegram_models.NewTGMessageInfo(telegram_models.TitleInfo(strings.Replace(update.Message.Text, command, "", -1)))
-
-	msg, err := t.handlers[command].Handle(tgInfo)
-	if err != nil {
-		log.Error(err)
+		msg, err = t.notExistedCommand.Handle(tgInfo)
+	} else {
+		msg, err = t.handlers[command].Handle(tgInfo)
 	}
 
 	chattable := tgbotapi.NewMessage(update.Message.Chat.ID, msg)
