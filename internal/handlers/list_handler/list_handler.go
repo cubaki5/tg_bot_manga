@@ -1,11 +1,13 @@
 package list_handler
 
 import (
-	"tgbot/internal/infrastructure/telegram/telegram_models"
+	"tgbot/internal/infrastructure/telegram"
+	"tgbot/internal/models"
+	"tgbot/internal/models/models_types"
 )
 
 type UseCase interface {
-	List() (interface{}, error)
+	List() map[models_types.TitleID]models.Title
 }
 
 type ListHandler struct {
@@ -16,6 +18,6 @@ func NewListHandler(uc UseCase) *ListHandler {
 	return &ListHandler{uc: uc}
 }
 
-func (gh *ListHandler) Handle(targetInfo telegram_models.TGMessageInfo) (string, error) {
+func (gh *ListHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
 	return "", nil
 }

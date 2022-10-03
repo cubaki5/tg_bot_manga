@@ -1,5 +1,10 @@
 package notifier
 
+import (
+	"tgbot/internal/models"
+	"tgbot/internal/models/models_types"
+)
+
 type (
 	WebClient interface {
 		IsUpdated() bool
@@ -10,7 +15,7 @@ type (
 	}
 
 	Database interface {
-		List() (interface{}, error)
+		List() map[models_types.TitleID]models.Title
 	}
 )
 

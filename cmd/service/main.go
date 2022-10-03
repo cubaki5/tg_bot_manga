@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	db := runtime_database.NewDatabase(map[string]interface{}{})
+	db := runtime_database.NewDatabase()
 	webClient := mint_client.NewMintClient()
 	tgClient := telegram_client.NewTelegramClient()
 
@@ -27,7 +27,7 @@ func main() {
 
 	adUC := add_use_case.NewAddUseCase(db)
 	delUC := delete_use_case.NewDeleteUseCase(db)
-	getUC := list_use_case.NewGetUseCase(db)
+	listUC := list_use_case.NewGetUseCase(db)
 	startUC := start_use_case.NewStartUseCase()
 	notExecComUC := not_existed_command_use_case.NewNotExistedCommandUseCase()
 
@@ -35,7 +35,7 @@ func main() {
 		"start":  start_handler.NewStartHandler(startUC),
 		"add":    add_handler.NewAddHandler(adUC),
 		"delete": delete_handler.NewDeleteHandler(delUC),
-		"list":   list_handler.NewListHandler(getUC),
+		"list":   list_handler.NewListHandler(listUC),
 	}, not_existed_command_handler.NewNotExistedCommandHandler(notExecComUC))
 
 	tgBot.Run()

@@ -1,7 +1,7 @@
 package start_handler
 
 import (
-	"tgbot/internal/infrastructure/telegram/telegram_models"
+	"tgbot/internal/infrastructure/telegram"
 )
 
 type UseCase interface {
@@ -16,6 +16,6 @@ func NewStartHandler(uc UseCase) *StartHandler {
 	return &StartHandler{uc: uc}
 }
 
-func (sh StartHandler) Handle(targetInfo telegram_models.TGMessageInfo) (string, error) {
+func (sh StartHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
 	return sh.uc.Start(), nil
 }

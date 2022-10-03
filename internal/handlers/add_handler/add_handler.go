@@ -1,7 +1,7 @@
 package add_handler
 
 import (
-	"tgbot/internal/infrastructure/telegram/telegram_models"
+	"tgbot/internal/infrastructure/telegram"
 )
 
 type UseCase interface {
@@ -16,7 +16,7 @@ func NewAddHandler(uc UseCase) *AddHandler {
 	return &AddHandler{uc: uc}
 }
 
-func (a AddHandler) Handle(targetInfo telegram_models.TGMessageInfo) (string, error) {
+func (a AddHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
 	//TODO implement me
 	panic("implement me")
 }
