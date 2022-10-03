@@ -3,7 +3,7 @@ package models_types
 type (
 	TitleName string
 	URL       string
-	TitleID   int64
+	TitleID   uint32
 )
 
 func (t TitleName) String() string {
@@ -14,6 +14,6 @@ func (u URL) String() string {
 	return string(u)
 }
 
-func (t TitleID) Int64() int64 {
-	return int64(t)
+func (t TitleID) Uint32() uint32 {
+	return uint32(t)
 }
