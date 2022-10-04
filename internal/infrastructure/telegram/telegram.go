@@ -3,6 +3,7 @@ package telegram
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/labstack/gommon/log"
+	"os"
 )
 
 type Handler interface {
@@ -16,6 +17,8 @@ type TelegramBot struct {
 }
 
 func NewTGBot(handlers map[string]Handler, notExistedCommand Handler) *TelegramBot {
+
+	botToken := os.Getenv("TG_BOT_TOKEN")
 
 	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
