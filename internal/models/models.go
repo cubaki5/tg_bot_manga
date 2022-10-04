@@ -1,12 +1,14 @@
 package models
 
 import (
-	"tgbot/internal/models/models_types"
 	"time"
+
+	"tgbot/internal/models/models_types"
 )
 
 type Title struct {
-	TitleName  models_types.TitleName
+	ID         models_types.TitleID
+	Name       models_types.TitleName
 	URL        models_types.URL
 	LastUpdate time.Time
 }

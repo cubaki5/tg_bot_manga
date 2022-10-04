@@ -13,7 +13,7 @@ type ListUseCase struct {
 	db Database
 }
 
-func NewGetUseCase(db Database) *ListUseCase {
+func NewListUseCase(db Database) *ListUseCase {
 	return &ListUseCase{db: db}
 }
 

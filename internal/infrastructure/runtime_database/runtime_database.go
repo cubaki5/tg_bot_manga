@@ -3,6 +3,7 @@ package runtime_database
 import (
 	"errors"
 	"sync"
+
 	"tgbot/internal/models"
 	"tgbot/internal/models/models_types"
 )
@@ -35,16 +36,17 @@ func (d *MangaDatabase) List() map[models_types.TitleID]models.Title {
 
 func (d *MangaDatabase) Add(title models.Title) {
 	d.mx.Lock()
-	defer d.mx.Unlock()
+	title.ID = d.incr
 	d.db[d.incr] = title
 	d.incr++
+	d.mx.Unlock()
 }
 
 func (d *MangaDatabase) Delete(titleName models_types.TitleName) error {
 	d.mx.Lock()
 	defer d.mx.Unlock()
 	for key := range d.db {
-		if d.db[key].TitleName == titleName {
+		if d.db[key].Name == titleName {
 			delete(d.db, key)
 			return nil
 		}

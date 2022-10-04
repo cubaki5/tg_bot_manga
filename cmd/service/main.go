@@ -27,7 +27,7 @@ func main() {
 
 	adUC := add_use_case.NewAddUseCase(db)
 	delUC := delete_use_case.NewDeleteUseCase(db)
-	listUC := list_use_case.NewGetUseCase(db)
+	listUC := list_use_case.NewListUseCase(db)
 	startUC := start_use_case.NewStartUseCase()
 	notExecComUC := not_existed_command_use_case.NewNotExistedCommandUseCase()
 
