@@ -1,22 +1,23 @@
 package telegram
 
 import (
+	"os"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/labstack/gommon/log"
-	"os"
 )
 
 type Handler interface {
 	Handle(targetInfo TGMessageInfo) (string, error)
 }
 
-type TelegramBot struct {
+type Bot struct {
 	bot               *tgbotapi.BotAPI
 	handlers          map[string]Handler
 	notExistedCommand Handler
 }
 
-func NewTGBot(handlers map[string]Handler, notExistedCommand Handler) *TelegramBot {
+func NewTGBot(handlers map[string]Handler, notExistedCommand Handler) *Bot {
 
 	botToken := os.Getenv("TG_BOT_TOKEN")
 
@@ -25,14 +26,14 @@ func NewTGBot(handlers map[string]Handler, notExistedCommand Handler) *TelegramB
 		log.Error(err)
 	}
 
-	return &TelegramBot{
+	return &Bot{
 		bot:               bot,
 		handlers:          handlers,
 		notExistedCommand: notExistedCommand,
 	}
 }
 
-func (t *TelegramBot) Run() {
+func (t *Bot) Run() {
 	updateConfig := tgbotapi.NewUpdate(0)
 	updateConfig.Timeout = 3
 	updateConfig.Limit = 50
@@ -46,7 +47,7 @@ func (t *TelegramBot) Run() {
 	}
 }
 
-func (t *TelegramBot) updateHandle(update tgbotapi.Update, command string) {
+func (t *Bot) updateHandle(update tgbotapi.Update, command string) {
 	var (
 		msg string
 		err error
@@ -58,6 +59,9 @@ func (t *TelegramBot) updateHandle(update tgbotapi.Update, command string) {
 		msg, err = t.notExistedCommand.Handle(tgInfo)
 	} else {
 		msg, err = t.handlers[command].Handle(tgInfo)
+	}
+	if err != nil {
+		log.Error(err)
 	}
 
 	chattable := tgbotapi.NewMessage(update.Message.Chat.ID, msg)
