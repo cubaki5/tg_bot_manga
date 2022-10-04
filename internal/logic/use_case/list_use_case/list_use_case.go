@@ -1,17 +1,22 @@
 package list_use_case
 
+import (
+	"tgbot/internal/models"
+	"tgbot/internal/models/models_types"
+)
+
 type Database interface {
-	List() (interface{}, error)
+	List() map[models_types.TitleID]models.Title
 }
 
 type ListUseCase struct {
 	db Database
 }
 
-func NewGetUseCase(db Database) *ListUseCase {
+func NewListUseCase(db Database) *ListUseCase {
 	return &ListUseCase{db: db}
 }
 
-func (s *ListUseCase) List() (interface{}, error) {
-	return nil, nil
+func (s *ListUseCase) List() map[models_types.TitleID]models.Title {
+	return nil
 }

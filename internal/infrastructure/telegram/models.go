@@ -1,4 +1,4 @@
-package telegram_models
+package telegram
 
 func NewTGMessageInfo(title TitleInfo) TGMessageInfo {
 	return TGMessageInfo{title: title}

@@ -1,7 +1,9 @@
 package add_use_case
 
+import "tgbot/internal/models"
+
 type Database interface {
-	Add() error
+	Add(title models.Title)
 }
 
 type AddUseCase struct {

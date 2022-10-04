@@ -3,11 +3,10 @@ package telegram
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/labstack/gommon/log"
-	"tgbot/internal/infrastructure/telegram/telegram_models"
 )
 
 type Handler interface {
-	Handle(targetInfo telegram_models.TGMessageInfo) (string, error)
+	Handle(targetInfo TGMessageInfo) (string, error)
 }
 
 type TelegramBot struct {
@@ -50,7 +49,7 @@ func (t *TelegramBot) updateHandle(update tgbotapi.Update, command string) {
 		err error
 	)
 
-	tgInfo := telegram_models.NewTGMessageInfo(telegram_models.TitleInfo(update.Message.CommandArguments()))
+	tgInfo := NewTGMessageInfo(TitleInfo(update.Message.CommandArguments()))
 
 	if _, ok := t.handlers[command]; !ok {
 		msg, err = t.notExistedCommand.Handle(tgInfo)

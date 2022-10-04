@@ -1,7 +1,9 @@
 package delete_use_case
 
+import "tgbot/internal/models/models_types"
+
 type Database interface {
-	Delete() error
+	Delete(titleName models_types.TitleName) error
 }
 
 type DeleteUseCase struct {
