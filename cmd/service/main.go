@@ -10,6 +10,8 @@ import (
 	"tgbot/internal/infrastructure/runtime_database"
 	"tgbot/internal/infrastructure/telegram"
 	"tgbot/internal/infrastructure/telegram_client"
+	"tgbot/internal/logic/modules/mint_information"
+	"tgbot/internal/logic/modules/mint_information/parsers/HTML"
 	"tgbot/internal/logic/modules/notifier"
 	"tgbot/internal/logic/use_case/add_use_case"
 	"tgbot/internal/logic/use_case/delete_use_case"
@@ -22,10 +24,12 @@ func main() {
 	db := runtime_database.NewDatabase()
 	webClient := mint_client.NewMintClient()
 	tgClient := telegram_client.NewTelegramClient()
+	parser := HTML.NewParser()
 
 	not := notifier.NewNotifier(webClient, db, tgClient)
+	getModule := mint_information.NewGetTitleModule(webClient, parser)
 
-	adUC := add_use_case.NewAddUseCase(db)
+	adUC := add_use_case.NewAddUseCase(db, getModule)
 	delUC := delete_use_case.NewDeleteUseCase(db)
 	listUC := list_use_case.NewListUseCase(db)
 	startUC := start_use_case.NewStartUseCase()

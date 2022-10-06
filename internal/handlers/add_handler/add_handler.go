@@ -2,22 +2,24 @@ package add_handler
 
 import (
 	"tgbot/internal/infrastructure/telegram"
-	"tgbot/internal/models"
+	"tgbot/internal/models/models_types"
 )
 
-type UseCase interface {
-	Add(title models.Title)
+type AddUseCase interface {
+	Add(URL models_types.URL) (string, error)
 }
 
 type AddHandler struct {
-	uc UseCase
+	AddUC AddUseCase
 }
 
-func NewAddHandler(uc UseCase) *AddHandler {
-	return &AddHandler{uc: uc}
+func NewAddHandler(addUC AddUseCase) *AddHandler {
+	return &AddHandler{
+		AddUC: addUC,
+	}
 }
 
 func (a AddHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
-	//TODO implement me
-	panic("implement me")
+	URL := models_types.URL(targetInfo.Title)
+	return a.AddUC.Add(URL)
 }

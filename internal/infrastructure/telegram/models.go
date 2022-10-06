@@ -1,11 +1,15 @@
 package telegram
 
-func NewTGMessageInfo(title TitleInfo) TGMessageInfo {
-	return TGMessageInfo{title: title}
+func NewTGMessageInfo(Title TitleInfo) TGMessageInfo {
+	return TGMessageInfo{Title: Title}
 }
 
 type TGMessageInfo struct {
-	title TitleInfo
+	Title TitleInfo
 }
 
 type TitleInfo string
+
+func (t TitleInfo) String() string {
+	return string(t)
+}

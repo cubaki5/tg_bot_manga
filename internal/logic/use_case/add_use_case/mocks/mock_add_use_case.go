@@ -7,6 +7,7 @@ package mocks
 import (
 	reflect "reflect"
 	models "tgbot/internal/models"
+	models_types "tgbot/internal/models/models_types"
 
 	gomock "github.com/golang/mock/gomock"
 )
@@ -44,4 +45,42 @@ func (m *MockDatabase) Add(title models.Title) {
 func (mr *MockDatabaseMockRecorder) Add(title interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockDatabase)(nil).Add), title)
+}
+
+// MockGetTitleModules is a mock of GetTitleModules interface.
+type MockGetTitleModules struct {
+	ctrl     *gomock.Controller
+	recorder *MockGetTitleModulesMockRecorder
+}
+
+// MockGetTitleModulesMockRecorder is the mock recorder for MockGetTitleModules.
+type MockGetTitleModulesMockRecorder struct {
+	mock *MockGetTitleModules
+}
+
+// NewMockGetTitleModules creates a new mock instance.
+func NewMockGetTitleModules(ctrl *gomock.Controller) *MockGetTitleModules {
+	mock := &MockGetTitleModules{ctrl: ctrl}
+	mock.recorder = &MockGetTitleModulesMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockGetTitleModules) EXPECT() *MockGetTitleModulesMockRecorder {
+	return m.recorder
+}
+
+// GetTitle mocks base method.
+func (m *MockGetTitleModules) GetTitle(URL models_types.URL) (models.Title, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTitle", URL)
+	ret0, _ := ret[0].(models.Title)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTitle indicates an expected call of GetTitle.
+func (mr *MockGetTitleModulesMockRecorder) GetTitle(URL interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTitle", reflect.TypeOf((*MockGetTitleModules)(nil).GetTitle), URL)
 }
