@@ -6,6 +6,8 @@ import (
 	"tgbot/internal/models"
 )
 
+//go:generate mockgen --source=add_use_case.go --destination=mocks/mock_add_use_case.go --package=mocks
+
 type Database interface {
 	Add(title models.Title)
 }
