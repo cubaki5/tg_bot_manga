@@ -28,15 +28,6 @@ func TestDeleteUseCase_Delete(t *testing.T) {
 		assert.NoError(t, err)
 	})
 	t.Run("Delete func returns error", func(t *testing.T) {
-		t.Run("Delete func gets empty name", func(t *testing.T) {
-			testName := models_types.TitleName("")
-			mockDB := initMock(t)
-
-			deleteUC := NewDeleteUseCase(mockDB)
-			err := deleteUC.Delete(testName)
-
-			assert.EqualError(t, err, "title Name is empty")
-		})
 		t.Run("Delete func returns the same error as method of interface", func(t *testing.T) {
 			testName := models_types.TitleName("TestName")
 			mockDB := initMock(t)

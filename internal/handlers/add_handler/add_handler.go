@@ -6,7 +6,7 @@ import (
 )
 
 type UseCase interface {
-	Add(title models.Title) error
+	Add(title models.Title)
 }
 
 type AddHandler struct {

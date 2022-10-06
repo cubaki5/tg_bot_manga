@@ -26,9 +26,7 @@ func TestListUseCase_List(t *testing.T) {
 		listUC := NewListUseCase(mockDB)
 		actMsg := listUC.List()
 
-		expMsg := `Your title list is empty.
-You can add title via command
-/add <title url>`
+		expMsg := listIsEmpty
 
 		assert.Equal(t, expMsg, actMsg)
 	})
@@ -36,24 +34,12 @@ You can add title via command
 		testMangaDB := map[models_types.TitleID]models.Title{
 			1: {
 				ID:   models_types.TitleID(1),
-				Name: models_types.TitleName("TestName1"),
-				URL:  models_types.URL("TestUrl1"),
-			},
-			2: {
-				ID:   models_types.TitleID(2),
-				Name: models_types.TitleName("TestName2"),
-				URL:  models_types.URL("TestUrl2"),
-			},
-			3: {
-				ID:   models_types.TitleID(3),
-				Name: models_types.TitleName("TestName3"),
-				URL:  models_types.URL("TestUrl3"),
+				Name: models_types.TitleName("TestName"),
+				URL:  models_types.URL("TestUrl"),
 			},
 		}
 		expMsg := `Your titles:
-1) TestName1 - TestUrl1
-2) TestName2 - TestUrl2
-3) TestName3 - TestUrl3
+— TestName - TestUrl
 `
 
 		mockDB := initMock(t)

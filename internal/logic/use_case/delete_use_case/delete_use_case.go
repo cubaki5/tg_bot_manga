@@ -1,8 +1,6 @@
 package delete_use_case
 
 import (
-	"errors"
-
 	"tgbot/internal/models/models_types"
 )
 
@@ -21,10 +19,5 @@ func NewDeleteUseCase(db Database) *DeleteUseCase {
 }
 
 func (s *DeleteUseCase) Delete(titleName models_types.TitleName) error {
-
-	if titleName == "" {
-		return errors.New("title Name is empty")
-	}
-
 	return s.db.Delete(titleName)
 }

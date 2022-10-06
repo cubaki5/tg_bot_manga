@@ -23,17 +23,23 @@ func NewListUseCase(db Database) *ListUseCase {
 
 func (s *ListUseCase) List() string {
 	mangaDB := s.db.List()
+	return getMessage(mangaDB)
+}
 
+func getMessage(mangaDB map[models_types.TitleID]models.Title) string {
 	if len(mangaDB) == 0 {
-		return `Your title list is empty.
-You can add title via command
-/add <title url>`
+		return listIsEmpty
 	}
 
-	msg := "Your titles:\n"
-	for key := 1; key < len(mangaDB)+1; key++ {
-		title := mangaDB[models_types.TitleID(key)]
-		msg = msg + fmt.Sprintf("%d) %s - %s\n", title.ID, title.Name, title.URL)
+	msg := fmt.Sprintf(headTemplate, msgHead)
+	msg += getMessageBody(mangaDB)
+	return msg
+}
+
+func getMessageBody(mangaDB map[models_types.TitleID]models.Title) string {
+	var msg string
+	for _, title := range mangaDB {
+		msg = msg + fmt.Sprintf(bodyTemplate, title.Name, title.URL)
 	}
 	return msg
 }
