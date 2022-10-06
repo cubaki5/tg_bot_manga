@@ -2,10 +2,11 @@ package delete_handler
 
 import (
 	"tgbot/internal/infrastructure/telegram"
+	"tgbot/internal/models/models_types"
 )
 
 type UseCase interface {
-	Delete() error
+	Delete(titleName models_types.TitleName) error
 }
 
 type DeleteHandler struct {

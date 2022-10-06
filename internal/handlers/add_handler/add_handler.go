@@ -2,10 +2,11 @@ package add_handler
 
 import (
 	"tgbot/internal/infrastructure/telegram"
+	"tgbot/internal/models"
 )
 
 type UseCase interface {
-	Add() error
+	Add(title models.Title)
 }
 
 type AddHandler struct {

@@ -30,8 +30,12 @@ func NewDatabase() *MangaDatabase {
 
 func (d *MangaDatabase) List() map[models_types.TitleID]models.Title {
 	d.mx.RLock()
-	defer d.mx.RUnlock()
-	return d.db
+	var titles = make(map[models_types.TitleID]models.Title, len(d.db))
+	for key, title := range d.db {
+		titles[key] = title
+	}
+	d.mx.RUnlock()
+	return titles
 }
 
 func (d *MangaDatabase) Add(title models.Title) {

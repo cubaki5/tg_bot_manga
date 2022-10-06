@@ -2,12 +2,10 @@ package list_handler
 
 import (
 	"tgbot/internal/infrastructure/telegram"
-	"tgbot/internal/models"
-	"tgbot/internal/models/models_types"
 )
 
 type UseCase interface {
-	List() map[models_types.TitleID]models.Title
+	List() string
 }
 
 type ListHandler struct {
