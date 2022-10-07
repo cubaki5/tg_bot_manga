@@ -1,6 +1,7 @@
 package mint_client
 
 import (
+	"errors"
 	"io"
 	"net/http"
 
@@ -28,7 +29,7 @@ func (m *MintClient) DoGetRequest(url models_types.URL) ([]byte, error) {
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", "TG_Bot")
+	req.Header.Set(userAgent, tgBot)
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -44,6 +45,7 @@ func (m *MintClient) DoGetRequest(url models_types.URL) ([]byte, error) {
 
 	if res.StatusCode != 200 {
 		log.Errorf("status code error: %d %s", res.StatusCode, res.Status)
+		return nil, errors.New("status code error")
 	}
 
 	var b []byte
