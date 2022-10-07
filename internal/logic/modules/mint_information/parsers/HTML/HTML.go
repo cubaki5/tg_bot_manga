@@ -27,9 +27,6 @@ func (h *Parser) Parse(b []byte) (parser_models.TitleParams, error) {
 	if err != nil {
 		return parser_models.TitleParams{}, err
 	}
-	if name == "" {
-		return parser_models.TitleParams{}, errors.New("can not parse this page")
-	}
 
 	lastUPD, err := getLastUPD(doc)
 	if err != nil {
@@ -50,14 +47,17 @@ func getName(doc *goquery.Document) (models_types.TitleName, error) {
 	if err != nil {
 		return "", err
 	}
+	if name == "" {
+		return "", errors.New("can not parse this page")
+	}
 	return models_types.TitleName(name), err
 }
 
 func getLastUPD(doc *goquery.Document) (time.Time, error) {
-	LastUPDDate := doc.Find(mintChapter).First().Find(chapterDate)
-	StrLastUPD, exist := LastUPDDate.Attr(date)
+	MintLastUPD := doc.Find(mintChapter).First().Find(chapterDate)
+	StrLastUPD, exist := MintLastUPD.Attr(date)
 	if !exist {
-		return time.Now(), nil
+		return time.Unix(0, 0), nil
 	}
 
 	lastUPD, err := time.Parse("2006-01-02 15:04:05", StrLastUPD)

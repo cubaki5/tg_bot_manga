@@ -6,13 +6,16 @@ import (
 	"tgbot/internal/models/models_types"
 )
 
-type Parser interface {
-	Parse(b []byte) (parser_models.TitleParams, error)
-}
+//go:generate mockgen --source=add_use_case.go --destination=mocks/mock_add_use_case.go --package=mocks
 
-type WebClient interface {
-	DoGetRequest(url models_types.URL) ([]byte, error)
-}
+type (
+	Parser interface {
+		Parse(b []byte) (parser_models.TitleParams, error)
+	}
+	WebClient interface {
+		DoGetRequest(url models_types.URL) ([]byte, error)
+	}
+)
 
 type GetTitleModule struct {
 	client WebClient

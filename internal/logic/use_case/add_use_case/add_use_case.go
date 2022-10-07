@@ -9,13 +9,14 @@ import (
 
 //go:generate mockgen --source=add_use_case.go --destination=mocks/mock_add_use_case.go --package=mocks
 
-type Database interface {
-	Add(title models.Title)
-}
-
-type GetTitleModules interface {
-	GetTitle(URL models_types.URL) (models.Title, error)
-}
+type (
+	Database interface {
+		Add(title models.Title)
+	}
+	GetTitleModules interface {
+		GetTitle(URL models_types.URL) (models.Title, error)
+	}
+)
 
 type AddUseCase struct {
 	db      Database
