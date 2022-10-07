@@ -6,7 +6,7 @@ import (
 	"tgbot/internal/models/models_types"
 )
 
-//go:generate mockgen --source=add_use_case.go --destination=mocks/mock_add_use_case.go --package=mocks
+//go:generate mockgen --source=mint_information.go --destination=mocks/mock_mint_information.go --package=mocks
 
 type (
 	Parser interface {
