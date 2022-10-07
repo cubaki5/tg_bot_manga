@@ -23,9 +23,10 @@ func TestDeleteUseCase_Delete(t *testing.T) {
 		mockDB.EXPECT().Delete(testName).Return(nil)
 
 		deleteUC := NewDeleteUseCase(mockDB)
-		err := deleteUC.Delete(testName)
+		msg, err := deleteUC.Delete(testName)
 
 		assert.NoError(t, err)
+		assert.Equal(t, "Title <TestName> is deleted", msg)
 	})
 	t.Run("Delete func returns error", func(t *testing.T) {
 		t.Run("Delete func returns the same error as method of interface", func(t *testing.T) {
@@ -34,9 +35,10 @@ func TestDeleteUseCase_Delete(t *testing.T) {
 			mockDB.EXPECT().Delete(gomock.Any()).Return(errors.New("test error"))
 
 			deleteUC := NewDeleteUseCase(mockDB)
-			err := deleteUC.Delete(testName)
+			msg, err := deleteUC.Delete(testName)
 
 			assert.EqualError(t, err, "test error")
+			assert.Equal(t, "Doesn't know title <TestName>, try another name", msg)
 		})
 	})
 }
