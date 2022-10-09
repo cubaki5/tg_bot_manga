@@ -17,5 +17,5 @@ func NewListHandler(uc UseCase) *ListHandler {
 }
 
 func (gh *ListHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
-	return "", nil
+	return gh.uc.List(), nil
 }
