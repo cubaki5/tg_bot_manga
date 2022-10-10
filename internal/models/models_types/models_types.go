@@ -4,6 +4,8 @@ type (
 	TitleName string
 	URL       string
 	TitleID   uint32
+
+	ChatID int64
 )
 
 func (t TitleName) String() string {
@@ -16,4 +18,8 @@ func (u URL) String() string {
 
 func (t TitleID) Uint32() uint32 {
 	return uint32(t)
+}
+
+func (t ChatID) Int64() int64 {
+	return int64(t)
 }

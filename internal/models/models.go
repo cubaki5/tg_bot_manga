@@ -12,3 +12,7 @@ type Title struct {
 	URL        models_types.URL
 	LastUpdate time.Time
 }
+
+type User struct {
+	ID models_types.ChatID
+}

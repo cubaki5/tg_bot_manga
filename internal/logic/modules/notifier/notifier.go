@@ -2,6 +2,8 @@ package notifier
 
 import (
 	"errors"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/labstack/gommon/log"
@@ -17,7 +19,7 @@ type (
 	}
 
 	TGClient interface {
-		PostMsg(title models.Title) error
+		PostMsg(title models.Title, user models.User) error
 	}
 
 	Database interface {
@@ -59,13 +61,22 @@ func (n *Notifier) CheckUpdates() {
 
 func (n *Notifier) checkListFotUpdates() {
 	titles := n.db.List()
+
+	chatID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
+	if err != nil {
+		log.Error(err)
+	}
+	user := models.User{ID: models_types.ChatID(chatID)}
+
 	for _, title := range titles {
+
 		isUPD, err := n.IsUpdated(title)
 		if err != nil {
 			log.Error(err)
 		}
+
 		if isUPD {
-			err = n.tgClient.PostMsg(title)
+			err = n.tgClient.PostMsg(title, user)
 			if err != nil {
 				log.Error(err)
 			}
@@ -89,6 +100,7 @@ func (n *Notifier) IsUpdated(title models.Title) (bool, error) {
 	}
 
 	if updatedTitle.LastUPD.After(title.LastUpdate) {
+		title.LastUpdate = updatedTitle.LastUPD
 		return true, nil
 	}
 
