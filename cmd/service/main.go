@@ -26,7 +26,7 @@ func main() {
 	tgClient := telegram_client.NewTelegramClient()
 	parser := HTML.NewParser()
 
-	not := notifier.NewNotifier(webClient, db, tgClient)
+	not := notifier.NewNotifier(webClient, db, tgClient, parser)
 	getModule := mint_information.NewGetTitleModule(webClient, parser)
 
 	adUC := add_use_case.NewAddUseCase(db, getModule)
