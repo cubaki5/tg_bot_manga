@@ -13,6 +13,8 @@ import (
 	"tgbot/internal/models/models_types"
 )
 
+//go:generate mockgen --source=notifier.go --destination=mocks/mock_notifier.go --package=mocks
+
 type (
 	WebClient interface {
 		DoGetRequest(url models_types.URL) ([]byte, error)
