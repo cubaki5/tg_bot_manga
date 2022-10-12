@@ -3,6 +3,7 @@ package telegram
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"tgbot/internal/models"
 
@@ -61,11 +62,7 @@ func (t *Bot) updateHandle(update tgbotapi.Update, command string) {
 
 	tgInfo := NewTGMessageInfo(TitleInfo(update.Message.CommandArguments()), ChatID(update.Message.Chat.ID))
 
-	if _, ok := t.handlers[command]; !ok {
-		msg, err = t.notExistedCommand.Handle(tgInfo)
-	} else {
-		msg, err = t.handlers[command].Handle(tgInfo)
-	}
+	msg, err = t.RequestRouter(tgInfo, command)
 	if err != nil {
 		log.Error(err)
 	}
@@ -76,6 +73,44 @@ func (t *Bot) updateHandle(update tgbotapi.Update, command string) {
 	if err != nil {
 		log.Error(err)
 	}
+}
+
+func (t *Bot) RequestRouter(tgInfo TGMessageInfo, command string) (string, error) {
+	var (
+		msg string
+		err error
+	)
+
+	auth, err := authenticationMiddleware(tgInfo)
+	if err != nil {
+		return authenticationFail, err
+	}
+
+	if !auth {
+		return notDefinedUser, nil
+	}
+
+	if _, ok := t.handlers[command]; !ok {
+		msg, _ = t.notExistedCommand.Handle(tgInfo) //notExistedCommand does not return an error under any circumstances
+	} else {
+		msg, err = t.handlers[command].Handle(tgInfo)
+	}
+
+	return msg, err
+}
+
+func authenticationMiddleware(tgInfo TGMessageInfo) (bool, error) {
+	ID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	if tgInfo.ID != ChatID(ID) {
+		return false, nil
+	}
+
+	return true, nil
 }
 
 func (t *Bot) PostMsg(title models.Title, user models.User) error {
