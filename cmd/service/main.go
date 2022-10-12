@@ -9,7 +9,6 @@ import (
 	"tgbot/internal/infrastructure/mint_client"
 	"tgbot/internal/infrastructure/runtime_database"
 	"tgbot/internal/infrastructure/telegram"
-	"tgbot/internal/infrastructure/telegram_client"
 	"tgbot/internal/logic/modules/mint_information"
 	"tgbot/internal/logic/modules/mint_information/parsers/HTML"
 	"tgbot/internal/logic/modules/notifier"
@@ -22,12 +21,12 @@ import (
 
 func main() {
 	db := runtime_database.NewDatabase()
-	webClient := mint_client.NewMintClient()
-	tgClient := telegram_client.NewTelegramClient()
+	mintClient := mint_client.NewMintClient()
 	parser := HTML.NewParser()
+	tgBot := telegram.NewTGBot()
 
-	not := notifier.NewNotifier(webClient, db, tgClient)
-	getModule := mint_information.NewGetTitleModule(webClient, parser)
+	not := notifier.NewNotifier(mintClient, db, tgBot, parser)
+	getModule := mint_information.NewGetTitleModule(mintClient, parser)
 
 	adUC := add_use_case.NewAddUseCase(db, getModule)
 	delUC := delete_use_case.NewDeleteUseCase(db)
@@ -35,7 +34,7 @@ func main() {
 	startUC := start_use_case.NewStartUseCase()
 	notExecComUC := not_existed_command_use_case.NewNotExistedCommandUseCase()
 
-	tgBot := telegram.NewTGBot(map[string]telegram.Handler{
+	tgBot.AppendBotWithHandlers(map[string]telegram.Handler{
 		"start":  start_handler.NewStartHandler(startUC),
 		"add":    add_handler.NewAddHandler(adUC),
 		"delete": delete_handler.NewDeleteHandler(delUC),

@@ -17,11 +17,6 @@ func NewMintClient() *MintClient {
 	return &MintClient{}
 }
 
-func (m *MintClient) IsUpdated() bool {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (m *MintClient) DoGetRequest(url models_types.URL) ([]byte, error) {
 
 	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
