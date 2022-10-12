@@ -1,8 +1,10 @@
 package telegram
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"strconv"
 
 	"tgbot/internal/models"
 
@@ -20,18 +22,23 @@ type Bot struct {
 	notExistedCommand Handler
 }
 
-func NewTGBot() *Bot {
+func NewTGBot() (*Bot, error) {
 
 	botToken := os.Getenv("TG_BOT_TOKEN")
+	chatID := os.Getenv("CHAT_ID")
+
+	if botToken == "" || chatID == "" {
+		return nil, errors.New("fail to get environment value")
+	}
 
 	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
-		log.Error(err)
+		return nil, err
 	}
 
 	return &Bot{
 		bot: bot,
-	}
+	}, nil
 }
 
 func (t *Bot) AppendBotWithHandlers(handlers map[string]Handler, notExistedCommand Handler) {
@@ -61,11 +68,7 @@ func (t *Bot) updateHandle(update tgbotapi.Update, command string) {
 
 	tgInfo := NewTGMessageInfo(TitleInfo(update.Message.CommandArguments()), ChatID(update.Message.Chat.ID))
 
-	if _, ok := t.handlers[command]; !ok {
-		msg, err = t.notExistedCommand.Handle(tgInfo)
-	} else {
-		msg, err = t.handlers[command].Handle(tgInfo)
-	}
+	msg, err = t.RequestRouter(tgInfo, command)
 	if err != nil {
 		log.Error(err)
 	}
@@ -76,6 +79,40 @@ func (t *Bot) updateHandle(update tgbotapi.Update, command string) {
 	if err != nil {
 		log.Error(err)
 	}
+}
+
+func (t *Bot) RequestRouter(tgInfo TGMessageInfo, command string) (string, error) {
+
+	auth, err := authenticationMiddleware(tgInfo)
+	if err != nil {
+		return authenticationFail, err
+	}
+
+	if !auth {
+		return notDefinedUser, nil
+	}
+
+	if _, ok := t.handlers[command]; !ok {
+		msg, _ := t.notExistedCommand.Handle(tgInfo) //notExistedCommand does not return an error under any circumstances
+		return msg, nil
+	}
+
+	msg, err := t.handlers[command].Handle(tgInfo)
+
+	return msg, err
+}
+
+func authenticationMiddleware(tgInfo TGMessageInfo) (bool, error) {
+	ID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
+	if err != nil {
+		return false, err
+	}
+
+	if tgInfo.ID != ChatID(ID) {
+		return false, nil
+	}
+
+	return true, nil
 }
 
 func (t *Bot) PostMsg(title models.Title, user models.User) error {

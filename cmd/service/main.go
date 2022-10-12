@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"tgbot/internal/handlers/add_handler"
 	"tgbot/internal/handlers/delete_handler"
 	"tgbot/internal/handlers/list_handler"
@@ -23,7 +25,10 @@ func main() {
 	db := runtime_database.NewDatabase()
 	mintClient := mint_client.NewMintClient()
 	parser := HTML.NewParser()
-	tgBot := telegram.NewTGBot()
+	tgBot, err := telegram.NewTGBot()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	not := notifier.NewNotifier(mintClient, db, tgBot, parser)
 	getModule := mint_information.NewGetTitleModule(mintClient, parser)
@@ -43,5 +48,4 @@ func main() {
 
 	tgBot.Run()
 	not.CheckUpdates()
-	//кого-то точно запускаю в отдельной горутине
 }

@@ -16,6 +16,6 @@ func NewNotExistedCommandHandler(uc UseCase) *NotExistedCommandHandler {
 	return &NotExistedCommandHandler{uc: uc}
 }
 
-func (nc NotExistedCommandHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
+func (nc NotExistedCommandHandler) Handle(_ telegram.TGMessageInfo) (string, error) {
 	return nc.uc.NotExistedCommand(), nil
 }

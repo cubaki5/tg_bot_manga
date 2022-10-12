@@ -16,6 +16,6 @@ func NewStartHandler(uc UseCase) *StartHandler {
 	return &StartHandler{uc: uc}
 }
 
-func (sh StartHandler) Handle(targetInfo telegram.TGMessageInfo) (string, error) {
+func (sh StartHandler) Handle(_ telegram.TGMessageInfo) (string, error) {
 	return sh.uc.Start(), nil
 }
