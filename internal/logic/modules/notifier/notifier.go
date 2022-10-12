@@ -16,7 +16,7 @@ import (
 //go:generate mockgen --source=notifier.go --destination=mocks/mock_notifier.go --package=mocks
 
 type (
-	WebClient interface {
+	MintClient interface {
 		DoGetRequest(url models_types.URL) ([]byte, error)
 	}
 
@@ -34,13 +34,13 @@ type (
 )
 
 type Notifier struct {
-	client   WebClient
+	client   MintClient
 	db       Database
 	tgClient TGClient
 	parser   Parser
 }
 
-func NewNotifier(cl WebClient, db Database, tgClient TGClient, parser Parser) *Notifier {
+func NewNotifier(cl MintClient, db Database, tgClient TGClient, parser Parser) *Notifier {
 	return &Notifier{
 		client:   cl,
 		db:       db,

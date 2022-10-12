@@ -12,17 +12,17 @@ type (
 	Parser interface {
 		Parse(b []byte) (parser_models.TitleParams, error)
 	}
-	WebClient interface {
+	MintClient interface {
 		DoGetRequest(url models_types.URL) ([]byte, error)
 	}
 )
 
 type GetTitleModule struct {
-	client WebClient
+	client MintClient
 	parser Parser
 }
 
-func NewGetTitleModule(client WebClient, parser Parser) *GetTitleModule {
+func NewGetTitleModule(client MintClient, parser Parser) *GetTitleModule {
 	return &GetTitleModule{
 		client: client,
 		parser: parser,

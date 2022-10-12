@@ -34,10 +34,9 @@ func NewTGBot() *Bot {
 	}
 }
 
-func AppendBotWithHandlers(TGBot *Bot, handlers map[string]Handler, notExistedCommand Handler) *Bot {
-	TGBot.handlers = handlers
-	TGBot.notExistedCommand = notExistedCommand
-	return TGBot
+func (t *Bot) AppendBotWithHandlers(handlers map[string]Handler, notExistedCommand Handler) {
+	t.handlers = handlers
+	t.notExistedCommand = notExistedCommand
 }
 
 func (t *Bot) Run() {
