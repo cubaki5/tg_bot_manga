@@ -67,22 +67,28 @@ func (n *Notifier) checkListFotUpdates() {
 	chatID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
 	if err != nil {
 		log.Error(err)
+		return
 	}
 	user := models.User{ID: models_types.ChatID(chatID)}
 
 	for _, title := range titles {
 
-		isUPD, err := n.IsUpdated(title)
-		if err != nil {
-			log.Error(err)
-		}
-
-		if isUPD {
-			err = n.tgClient.PostMsg(title, user)
+		go func(title models.Title) {
+			isUPD, err := n.IsUpdated(title)
 			if err != nil {
 				log.Error(err)
+				return
 			}
-		}
+
+			if isUPD {
+				err = n.tgClient.PostMsg(title, user)
+				if err != nil {
+					log.Error(err)
+					return
+				}
+			}
+		}(title)
+
 	}
 }
 
