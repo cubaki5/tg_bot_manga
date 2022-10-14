@@ -46,6 +46,6 @@ func main() {
 		"list":   list_handler.NewListHandler(listUC),
 	}, not_existed_command_handler.NewNotExistedCommandHandler(notExecComUC))
 
-	tgBot.Run()
 	not.CheckUpdates()
+	tgBot.Run()
 }

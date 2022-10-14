@@ -50,18 +50,16 @@ func NewNotifier(cl MintClient, db Database, tgClient TGClient, parser Parser) *
 }
 
 func (n *Notifier) CheckUpdates() {
-	//каждый час я проверяю есть обновления во всём списке и если встречаю тру, то вызываю метод пост у телеграмклиента
 	go func() {
 		tick := time.NewTicker(time.Hour)
 		defer tick.Stop()
 
 		for range tick.C {
-			n.checkListFotUpdates()
+			n.checkListForUpdates()
 		}
 	}()
 }
-
-func (n *Notifier) checkListFotUpdates() {
+func (n *Notifier) checkListForUpdates() {
 	titles := n.db.List()
 
 	chatID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
