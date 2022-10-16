@@ -28,6 +28,12 @@ func NewDatabase() *MangaDatabase {
 	return mangaDB
 }
 
+func (d *MangaDatabase) Set(updatedTitle models.Title) {
+	d.mx.Lock()
+	d.db[updatedTitle.ID] = updatedTitle
+	d.mx.Unlock()
+}
+
 func (d *MangaDatabase) List() map[models_types.TitleID]models.Title {
 	d.mx.RLock()
 	var titles = make(map[models_types.TitleID]models.Title, len(d.db))

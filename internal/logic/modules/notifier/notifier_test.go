@@ -14,9 +14,9 @@ import (
 	"tgbot/internal/models/models_types"
 )
 
-func initMockWebClient(t *testing.T) *mocks.MockWebClient {
+func initMockMintClient(t *testing.T) *mocks.MockMintClient {
 	ctr := gomock.NewController(t)
-	return mocks.NewMockWebClient(ctr)
+	return mocks.NewMockMintClient(ctr)
 }
 
 func initMockTGClient(t *testing.T) *mocks.MockTGClient {
@@ -78,7 +78,21 @@ func TestNotifier_IsUpdated(t *testing.T) {
 		}
 		for _, happyPathTest := range happyPathTests {
 			t.Run(happyPathTest.testName, func(t *testing.T) {
-				mockWebClient := initMockWebClient(t)
+				expTitle := models2.Title{
+					ID:         1,
+					Name:       happyPathTest.expTitleName,
+					URL:        happyPathTest.url,
+					LastUpdate: happyPathTest.lastUPD,
+				}
+
+				updTitle := models2.Title{
+					ID:         1,
+					Name:       happyPathTest.expTitleName,
+					URL:        happyPathTest.url,
+					LastUpdate: happyPathTest.updatedLastUPD,
+				}
+
+				mockWebClient := initMockMintClient(t)
 				mockTGClient := initMockTGClient(t)
 				mockParser := initMockParser(t)
 				mockDB := initMockDatabase(t)
@@ -88,19 +102,16 @@ func TestNotifier_IsUpdated(t *testing.T) {
 					Name:    happyPathTest.updatedTitleName,
 					LastUPD: happyPathTest.updatedLastUPD,
 				}, happyPathTest.errorParser)
+				if happyPathTest.testName == "Is updated" {
+					mockDB.EXPECT().Set(updTitle).Return()
+				}
 
 				not := NewNotifier(mockWebClient, mockDB, mockTGClient, mockParser)
 
-				isUPD, err := not.IsUpdated(models2.Title{
-					ID:         1,
-					Name:       happyPathTest.expTitleName,
-					URL:        happyPathTest.url,
-					LastUpdate: happyPathTest.lastUPD,
-				})
+				isUPD, err := not.IsUpdated(expTitle)
 
 				assert.NoError(t, err)
 				assert.Equal(t, happyPathTest.expIsUPD, isUPD)
-
 			})
 		}
 
@@ -158,7 +169,7 @@ func TestNotifier_IsUpdated(t *testing.T) {
 
 		for _, test := range tests {
 			t.Run(test.testName, func(t *testing.T) {
-				mockWebClient := initMockWebClient(t)
+				mockWebClient := initMockMintClient(t)
 				mockTGClient := initMockTGClient(t)
 				mockParser := initMockParser(t)
 				mockDB := initMockDatabase(t)
