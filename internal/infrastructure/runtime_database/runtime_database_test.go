@@ -151,3 +151,51 @@ func TestMangaDatabase_Delete(t *testing.T) {
 		})
 	})
 }
+
+func TestMangaDatabase_SetLastUPD(t *testing.T) {
+	t.Run("Happy path", func(t *testing.T) {
+		expID := models_types.TitleID(1)
+		expName := models_types.TitleName("NewTestName")
+		expURL := models_types.URL("NewTestURL")
+		explastUPD := time.Unix(3, 0)
+
+		id := models_types.TitleID(1)
+		name := models_types.TitleName("TestName")
+		url := models_types.URL("TestURL")
+		lastUPD := time.Unix(2, 0)
+
+		d := &MangaDatabase{
+			db: map[models_types.TitleID]models.Title{
+				expID: {
+					ID:         id,
+					Name:       name,
+					URL:        url,
+					LastUpdate: lastUPD,
+				},
+			},
+			incr: 2,
+		}
+
+		updatedTitle := models.Title{
+			ID:         expID,
+			Name:       expName,
+			URL:        expURL,
+			LastUpdate: explastUPD,
+		}
+
+		d.Set(updatedTitle)
+
+		t.Run("Correct ID", func(t *testing.T) {
+			assert.Equal(t, d.db[expID].ID, expID)
+		})
+		t.Run("Correct title", func(t *testing.T) {
+			assert.Equal(t, d.db[expID].Name, expName)
+		})
+		t.Run("Correct URL", func(t *testing.T) {
+			assert.Equal(t, d.db[expID].URL, expURL)
+		})
+		t.Run("Correct LastUpdate", func(t *testing.T) {
+			assert.Equal(t, d.db[expID].LastUpdate, explastUPD)
+		})
+	})
+}

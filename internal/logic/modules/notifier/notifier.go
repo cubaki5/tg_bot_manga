@@ -26,6 +26,7 @@ type (
 
 	Database interface {
 		List() map[models_types.TitleID]models.Title
+		Set(updatedTitle models.Title)
 	}
 
 	Parser interface {
@@ -107,6 +108,7 @@ func (n *Notifier) IsUpdated(title models.Title) (bool, error) {
 
 	if updatedTitle.LastUPD.After(title.LastUpdate) {
 		title.LastUpdate = updatedTitle.LastUPD
+		n.db.Set(title)
 		return true, nil
 	}
 

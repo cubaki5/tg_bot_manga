@@ -13,31 +13,31 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockWebClient is a mock of WebClient interface.
-type MockWebClient struct {
+// MockMintClient is a mock of MintClient interface.
+type MockMintClient struct {
 	ctrl     *gomock.Controller
-	recorder *MockWebClientMockRecorder
+	recorder *MockMintClientMockRecorder
 }
 
-// MockWebClientMockRecorder is the mock recorder for MockWebClient.
-type MockWebClientMockRecorder struct {
-	mock *MockWebClient
+// MockMintClientMockRecorder is the mock recorder for MockMintClient.
+type MockMintClientMockRecorder struct {
+	mock *MockMintClient
 }
 
-// NewMockWebClient creates a new mock instance.
-func NewMockWebClient(ctrl *gomock.Controller) *MockWebClient {
-	mock := &MockWebClient{ctrl: ctrl}
-	mock.recorder = &MockWebClientMockRecorder{mock}
+// NewMockMintClient creates a new mock instance.
+func NewMockMintClient(ctrl *gomock.Controller) *MockMintClient {
+	mock := &MockMintClient{ctrl: ctrl}
+	mock.recorder = &MockMintClientMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockWebClient) EXPECT() *MockWebClientMockRecorder {
+func (m *MockMintClient) EXPECT() *MockMintClientMockRecorder {
 	return m.recorder
 }
 
 // DoGetRequest mocks base method.
-func (m *MockWebClient) DoGetRequest(url models_types.URL) ([]byte, error) {
+func (m *MockMintClient) DoGetRequest(url models_types.URL) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DoGetRequest", url)
 	ret0, _ := ret[0].([]byte)
@@ -46,9 +46,9 @@ func (m *MockWebClient) DoGetRequest(url models_types.URL) ([]byte, error) {
 }
 
 // DoGetRequest indicates an expected call of DoGetRequest.
-func (mr *MockWebClientMockRecorder) DoGetRequest(url interface{}) *gomock.Call {
+func (mr *MockMintClientMockRecorder) DoGetRequest(url interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DoGetRequest", reflect.TypeOf((*MockWebClient)(nil).DoGetRequest), url)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DoGetRequest", reflect.TypeOf((*MockMintClient)(nil).DoGetRequest), url)
 }
 
 // MockTGClient is a mock of TGClient interface.
@@ -123,6 +123,18 @@ func (m *MockDatabase) List() map[models_types.TitleID]models0.Title {
 func (mr *MockDatabaseMockRecorder) List() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockDatabase)(nil).List))
+}
+
+// Set mocks base method.
+func (m *MockDatabase) Set(updatedTitle models0.Title) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Set", updatedTitle)
+}
+
+// Set indicates an expected call of Set.
+func (mr *MockDatabaseMockRecorder) Set(updatedTitle interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockDatabase)(nil).Set), updatedTitle)
 }
 
 // MockParser is a mock of Parser interface.
