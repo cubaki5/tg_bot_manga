@@ -3,3 +3,17 @@ repos:
     rev: v1.49.0
     hooks:
     - id: golangci-lint
+  - repo: local
+    hooks:
+      - id: go-unit-tests
+        name: go unit tests
+        entry:  go test ./... -covermode=count -coverprofile=coverage.out fmt
+        pass_filenames: false
+        types: [ go ]
+        language: system
+      - id: get-cover
+        name: get test coverage
+        entry:  go tool cover -func=coverage.out -o=coverage.out
+        pass_filenames: false
+        types: [ go ]
+        language: system
